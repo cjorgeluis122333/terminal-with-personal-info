@@ -1,14 +1,16 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { CommandEntry } from '../types';
-import { Language, TRANSLATIONS, SKILL_GROUPS, PROJECTS_DATA } from '../constants';
+import {Language, TRANSLATIONS, SKILL_GROUPS, PROJECTS_DATA, Mode, validCommands} from '../constants';
 import { getTerminalResponse } from '../services/geminiService';
+
 
 interface TerminalProps {
   lang: Language;
+  mode: Mode;
 }
 
-const Terminal: React.FC<TerminalProps> = ({ lang }) => {
+const Terminal: React.FC<TerminalProps> = ({ lang, mode }) => {
   const [history, setHistory] = useState<CommandEntry[]>([]);
   const [input, setInput] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
@@ -44,18 +46,22 @@ const Terminal: React.FC<TerminalProps> = ({ lang }) => {
     setIsProcessing(true);
 
     let response: React.ReactNode = null;
+let {about,stack,works,contact,clear} = validCommands
 
-    if (cmd === 'help') {
+    if (mode === 'ai') {
+      const aiText = await getTerminalResponse(cmd, lang);
+      response = <p className="text-slate-400 py-1 leading-relaxed text-sm">{aiText}</p>;
+    } else if (cmd === 'help') {
       response = (
         <div className="pl-6 py-4 border-l-2 border-slate-800 space-y-3 my-4">
           <p className="text-slate-500 text-xs uppercase tracking-widest font-bold">{t.commands.help}</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-2">
             {[
-              { name: 'about', desc: t.commands.helpDesc.about },
-              { name: 'stack', desc: t.commands.helpDesc.stack },
-              { name: 'works', desc: t.commands.helpDesc.works },
-              { name: 'contact', desc: t.commands.helpDesc.contact },
-              { name: 'clear', desc: t.commands.helpDesc.clear },
+              { name: about, desc: t.commands.helpDesc.about },
+              { name: stack, desc: t.commands.helpDesc.stack },
+              { name: works, desc: t.commands.helpDesc.works },
+              { name: contact, desc: t.commands.helpDesc.contact },
+              { name: clear, desc: t.commands.helpDesc.clear },
             ].map(c => (
               <div key={c.name} className="flex items-center justify-between group border-b border-white/[0.02] pb-1">
                 <span className="text-accent-teal/80 font-mono font-medium">{c.name}</span>
@@ -65,7 +71,7 @@ const Terminal: React.FC<TerminalProps> = ({ lang }) => {
           </div>
         </div>
       );
-    } else if (cmd === 'stack') {
+    } else if (cmd === stack) {
       response = (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-2 my-4">
           {SKILL_GROUPS.map(group => (
@@ -88,7 +94,7 @@ const Terminal: React.FC<TerminalProps> = ({ lang }) => {
           ))}
         </div>
       );
-    } else if (cmd === 'works') {
+    } else if (cmd === works) {
       const projects = PROJECTS_DATA[lang];
       response = (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-4">
@@ -117,11 +123,11 @@ const Terminal: React.FC<TerminalProps> = ({ lang }) => {
           ))}
         </div>
       );
-    } else if (cmd === 'clear') {
+    } else if (cmd === clear) {
       setHistory([]);
       setIsProcessing(false);
       return;
-    } else if (cmd === 'about') {
+    } else if (cmd === about) {
       response = (
         <div className="text-slate-400 text-sm max-w-3xl space-y-4 my-4 pl-4 border-l-2 border-accent-blue/30">
           <p className="italic leading-relaxed">{t.sections.about}</p>
@@ -133,7 +139,7 @@ const Terminal: React.FC<TerminalProps> = ({ lang }) => {
           </div>
         </div>
       );
-    } else if (cmd === 'contact') {
+    } else if (cmd === contact) {
       response = (
         <div className="flex flex-col gap-3 my-4 pl-4 border-l-2 border-accent-teal/30">
           <a href="https://github.com/cjorgeluis122333" target="_blank" className="flex items-center gap-3 group">
@@ -144,12 +150,11 @@ const Terminal: React.FC<TerminalProps> = ({ lang }) => {
             <span className="material-symbols-outlined text-accent-teal text-sm group-hover:scale-110 transition-transform">person</span>
             <span className="text-slate-300 text-xs font-mono group-hover:text-accent-teal transition-colors">linkedin.com/in/jorge-luis-castillo</span>
           </a>
-        </div>
-      );
-    } else {
-      const aiText = await getTerminalResponse(cmd, lang);
-      response = <p className="text-slate-400 py-1 leading-relaxed text-sm">{aiText}</p>;
-    }
+         </div>
+       );
+     } else {
+       response = <p className="text-red-400 py-1 leading-relaxed text-sm">El término '{input}' no se reconoce.</p>;
+     }
 
     setHistory(prev => [...prev, {
       id: (Date.now() + 1).toString(),
