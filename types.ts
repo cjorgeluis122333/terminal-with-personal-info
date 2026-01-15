@@ -1,3 +1,4 @@
+import React from 'react';
 
 export type CommandEntry = {
   id: string;
