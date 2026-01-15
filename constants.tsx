@@ -3,7 +3,7 @@ export type Mode = 'ai' | 'terminal';
 
 export const TRANSLATIONS = {
     en: {
-        header: "Cloud Console",
+        header: "Bio.Terminal",
         name: "Jorge Luis Castillo",
         role: "Android Developer @ Xetid",
         sessionStatus: "Session Active",
@@ -46,7 +46,7 @@ export const TRANSLATIONS = {
     },
 
     es: {
-        header: "Consola Cloud",
+        header: "Bio.Terminal",
         name: "Jorge Luis Castillo",
         role: "Desarrollador Android @ Xetid",
         sessionStatus: "Sesión Activa",
