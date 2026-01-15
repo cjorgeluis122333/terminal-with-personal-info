@@ -90,71 +90,81 @@ export const TRANSLATIONS = {
 };
 
 export const SKILL_GROUPS = [
-  {
-    id: 'languages',
-    icon: 'terminal',
-    items: ['Kotlin', 'Java', 'JavaScript', 'SQL'],
-    color: 'blue'
-  },
-  {
-    id: 'frameworks',
-    icon: 'deployed_code',
-    items: ['Jetpack Compose', 'Spring Boot', 'React'],
-    color: 'teal'
-  },
-  {
-    id: 'db',
-    icon: 'database',
-    items: ['MySQL', 'PostgreSQL', 'SQLite'],
-    color: 'slate'
-  },
-  {
-    id: 'tools',
-    icon: 'construction',
-    items: ['Git', 'GitHub', 'Docker', 'Android Studio', 'IntelliJ IDEA'],
-    color: 'blue'
-  }
+    {
+        id: 'languages',
+        icon: 'terminal',
+        items: ['Kotlin', 'Java', 'JavaScript', 'SQL'],
+        color: 'blue'
+    },
+    {
+        id: 'frameworks',
+        icon: 'deployed_code',
+        items: ['Jetpack Compose', 'Spring Boot', 'React'],
+        color: 'teal'
+    },
+    {
+        id: 'db',
+        icon: 'database',
+        items: ['MySQL', 'PostgreSQL', 'SQLite'],
+        color: 'slate'
+    },
+    {
+        id: 'tools',
+        icon: 'construction',
+        items: ['Git', 'GitHub', 'Docker', 'Android Studio', 'IntelliJ IDEA'],
+        color: 'blue'
+    }
 ];
 
 export const PROJECTS_DATA = {
-  en: [
-    {
-      title: 'Modular-App-Contact',
-      description: 'Modular Android application for managing contacts, featuring clean architecture and Jetpack Compose.',
-      tags: ['Kotlin', 'Jetpack Compose', 'Clean Architecture'],
-      link: 'https://github.com/cjorgeluis122333/Modular-App-Contact'
-    },
-    {
-      title: 'my-practice-spring-boot',
-      description: 'Backend project implementing RESTful APIs and modern Java design patterns.',
-      tags: ['Java', 'Spring Boot', 'REST API'],
-      link: 'https://github.com/cjorgeluis122333/my-practice-spring-boot'
-    },
-    {
-      title: 'final-project-react',
-      description: 'Web development project showcasing advanced UI components and state management.',
-      tags: ['React', 'JavaScript', 'UI/UX'],
-      link: 'https://github.com/cjorgeluis122333/final-project-react'
-    }
-  ],
-  es: [
-    {
-      title: 'Modular-App-Contact',
-      description: 'Aplicación Android modular para gestionar contactos, con arquitectura limpia y Jetpack Compose.',
-      tags: ['Kotlin', 'Jetpack Compose', 'Arquitectura Limpia'],
-      link: 'https://github.com/cjorgeluis122333/Modular-App-Contact'
-    },
-    {
-      title: 'my-practice-spring-boot',
-      description: 'Proyecto backend que implementa APIs RESTful y patrones de diseño modernos en Java.',
-      tags: ['Java', 'Spring Boot', 'API REST'],
-      link: 'https://github.com/cjorgeluis122333/my-practice-spring-boot'
-    },
-    {
-      title: 'final-project-react',
-      description: 'Proyecto de desarrollo web que muestra componentes de UI avanzados y gestión de estado.',
-      tags: ['React', 'JavaScript', 'UI/UX'],
-      link: 'https://github.com/cjorgeluis122333/final-project-react'
-    }
-  ]
+    en: [
+        {
+            title: 'Modular-App-Contact',
+            description: 'Modular Android application for managing contacts, featuring clean architecture and Jetpack Compose.',
+            tags: ['Kotlin', 'Jetpack Compose', 'Clean Architecture'],
+            link: 'https://github.com/cjorgeluis122333/Modular-App-Contact'
+        },
+        {
+            title: 'my-practice-spring-boot',
+            description: 'Backend project implementing RESTful APIs and modern Java design patterns.',
+            tags: ['Java', 'Spring Boot', 'REST API'],
+            link: 'https://github.com/cjorgeluis122333/my-practice-spring-boot'
+        },
+        {
+            title: 'final-project-react',
+            description: 'Web development project showcasing advanced UI components and state management.',
+            tags: ['React', 'JavaScript', 'UI/UX'],
+            link: 'https://github.com/cjorgeluis122333/final-project-react'
+        }
+    ],
+    es: [
+        {
+            title: 'Modular-App-Contact',
+            description: 'Aplicación Android modular para gestionar contactos, con arquitectura limpia y Jetpack Compose.',
+            tags: ['Kotlin', 'Jetpack Compose', 'Arquitectura Limpia'],
+            link: 'https://github.com/cjorgeluis122333/Modular-App-Contact'
+        },
+        {
+            title: 'my-practice-spring-boot',
+            description: 'Proyecto backend que implementa APIs RESTful y patrones de diseño modernos en Java.',
+            tags: ['Java', 'Spring Boot', 'API REST'],
+            link: 'https://github.com/cjorgeluis122333/my-practice-spring-boot'
+        },
+        {
+            title: 'final-project-react',
+            description: 'Proyecto de desarrollo web que muestra componentes de UI avanzados y gestión de estado.',
+            tags: ['React', 'JavaScript', 'UI/UX'],
+            link: 'https://github.com/cjorgeluis122333/final-project-react'
+        }
+    ]
+};
+
+
+export const validCommands = {
+    'help': 'help',
+    'stack': 'stack',
+    'works': 'works',
+    'clear': 'clear',
+    'about': 'about',
+    'contact': 'contact'
 };
