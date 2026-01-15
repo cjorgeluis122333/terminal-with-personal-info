@@ -1,4 +1,5 @@
 export type Language = 'en' | 'es';
+export type Mode = 'ai' | 'terminal';
 
 export const TRANSLATIONS = {
     en: {
