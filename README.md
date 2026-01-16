@@ -1,6 +1,8 @@
 # TODO
 1. Improve the architecture
-2. Divider the answer AI to answer Command
+2. Divider the answer AI to answer Command (DONE)
+3. When you write in mode shell some word, and it is not alive like a command the error always is in Spanish. Make the message error show in the language selected
+4. 
 
 <div align="center">
 <img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
