@@ -16,7 +16,9 @@ const Terminal: React.FC<TerminalProps> = ({ lang, mode }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  
+
+
+
   const t = TRANSLATIONS[lang];
 
   useEffect(() => {
