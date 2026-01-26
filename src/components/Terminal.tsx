@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { CommandEntry } from '@/types.ts';
+import { CommandEntry, ResponseType } from '@/types.ts';
 import {Language, TRANSLATIONS, SKILL_GROUPS, PROJECTS_DATA, Mode, validCommands} from '../constants';
 import { getTerminalResponse } from '../services/geminiService.ts';
 
@@ -17,9 +17,127 @@ const Terminal: React.FC<TerminalProps> = ({ lang, mode }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-
-
   const t = TRANSLATIONS[lang];
+
+  // Centralized response generation function
+  const generateResponseForCommand = async (command: string, language: Language, responseType?: ResponseType): Promise<React.ReactNode> => {
+    const t = TRANSLATIONS[language];
+    const {about, stack, works, contact, clear} = validCommands;
+
+    switch (responseType) {
+      case 'help':
+        return (
+          <div className="pl-6 py-4 border-l-2 border-slate-800 space-y-3 my-4">
+            <p className="text-slate-500 text-xs uppercase tracking-widest font-bold">{t.commands.help}</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-2">
+              {[
+                { name: about, desc: t.commands.helpDesc.about },
+                { name: stack, desc: t.commands.helpDesc.stack },
+                { name: works, desc: t.commands.helpDesc.works },
+                { name: contact, desc: t.commands.helpDesc.contact },
+                { name: clear, desc: t.commands.helpDesc.clear },
+              ].map(c => (
+                <div key={c.name} className="flex items-center justify-between group border-b border-white/[0.02] pb-1">
+                  <span className="text-accent-teal/80 font-mono font-medium">{c.name}</span>
+                  <span className="text-slate-600 text-[10px] italic">{c.desc}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+
+      case 'stack':
+        return (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-2 my-4">
+            {SKILL_GROUPS.map(group => (
+              <div key={group.id} className="glass-panel p-4 rounded-lg border border-white/5 hover:border-accent-blue/20 transition-all group">
+                <div className={`flex items-center gap-3 mb-3 ${group.color === 'blue' ? 'text-accent-blue' : group.color === 'teal' ? 'text-accent-teal' : 'text-slate-400'}`}>
+                  <span className="material-symbols-outlined text-lg">{group.icon}</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest">
+                    {t.sections.skills[group.id as keyof typeof t.sections.skills]}
+                  </span>
+                </div>
+                <ul className="space-y-1">
+                  {group.items.map(item => (
+                    <li key={item} className="text-[11px] text-slate-400 group-hover:text-slate-300 transition-colors flex items-center gap-2">
+                      <span className="size-1 rounded-full bg-slate-700"></span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        );
+
+      case 'works':
+        const projects = PROJECTS_DATA[language];
+        return (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-4">
+            {projects.map(p => (
+              <a 
+                key={p.title} 
+                href={p.link} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="glass-panel p-5 rounded-lg border border-white/5 bg-slate-900/40 hover:bg-slate-800/60 hover:border-accent-blue/30 transition-all flex flex-col"
+              >
+                <div className="flex justify-between items-start mb-2">
+                  <h4 className="text-accent-blue text-[11px] font-bold uppercase flex items-center gap-2">
+                    <span className="size-1.5 rounded-full bg-accent-blue"></span>
+                    {p.title}
+                  </h4>
+                  <span className="material-symbols-outlined text-[14px] text-slate-600">open_in_new</span>
+                </div>
+                <p className="text-slate-400 text-[10px] mb-4 leading-relaxed flex-1">{p.description}</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {p.tags.map(tag => (
+                    <span key={tag} className="px-1.5 py-0.5 bg-slate-800 rounded-sm text-[8px] text-slate-500 font-mono border border-white/5">{tag}</span>
+                  ))}
+                </div>
+              </a>
+            ))}
+          </div>
+        );
+
+      case 'about':
+        return (
+          <div className="text-slate-400 text-sm max-w-3xl space-y-4 my-4 pl-4 border-l-2 border-accent-blue/30">
+            <p className="italic leading-relaxed">{t.sections.about}</p>
+            <div className="flex items-center gap-4">
+              <a href="https://www.xetid.cu/en" target="_blank" className="flex items-center gap-2 px-3 py-1.5 bg-slate-800 rounded border border-white/5 hover:border-accent-teal/40 transition-colors">
+                <span className="material-symbols-outlined text-accent-teal text-sm">business</span>
+                <span className="text-[10px] font-bold uppercase tracking-wider">Xetid Official</span>
+              </a>
+            </div>
+          </div>
+        );
+
+      case 'contact':
+        return (
+          <div className="flex flex-col gap-3 my-4 pl-4 border-l-2 border-accent-teal/30">
+            <a href="https://github.com/cjorgeluis122333" target="_blank" className="flex items-center gap-3 group">
+              <span className="material-symbols-outlined text-accent-blue text-sm group-hover:scale-110 transition-transform">link</span>
+              <span className="text-slate-300 text-xs font-mono group-hover:text-accent-blue transition-colors">github.com/cjorgeluis122333</span>
+            </a>
+            <a href="https://www.linkedin.com/in/jorge-luis-castillo-a93514341" target="_blank" className="flex items-center gap-3 group">
+              <span className="material-symbols-outlined text-accent-teal text-sm group-hover:scale-110 transition-transform">person</span>
+              <span className="text-slate-300 text-xs font-mono group-hover:text-accent-teal transition-colors">linkedin.com/in/jorge-luis-castillo</span>
+            </a>
+           </div>
+         );
+
+      case 'error':
+        return <p className="text-red-400 py-1 leading-relaxed text-sm">{t.errorMessage.replace('{input}', command)}</p>;
+
+      case 'ai':
+        const aiText = await getTerminalResponse(command.trim().toLowerCase(), language);
+        return <p className="text-slate-400 py-1 leading-relaxed text-sm">{aiText}</p>;
+
+      default:
+        return <p className="text-red-400 py-1 leading-relaxed text-sm">{t.errorMessage.replace('{input}', command)}</p>;
+    }
+  };
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -27,25 +145,42 @@ const Terminal: React.FC<TerminalProps> = ({ lang, mode }) => {
     }
   }, [history, isProcessing]);
 
-  // Re-translate error messages when language changes
+  // Re-translate all responses when language changes
   useEffect(() => {
-    setHistory(prev => prev.map(entry => {
-      if (entry.type === 'response' && entry.originalCommand) {
-        // Re-generate response for error messages in new language
-        const t = TRANSLATIONS[lang];
-        const cmd = entry.originalCommand.trim().toLowerCase();
-        
-        // Only re-translate error messages
-        if (!validCommands[cmd as keyof typeof validCommands]) {
-          const newErrorResponse = <p className="text-red-400 py-1 leading-relaxed text-sm">{t.errorMessage.replace('{input}', entry.originalCommand)}</p>;
-          return {
-            ...entry,
-            content: newErrorResponse
-          };
-        }
+    const translateResponses = async () => {
+      // Only show processing for AI responses that require API calls
+      const hasAIResponses = history.some(entry => entry.type === 'response' && entry.responseType === 'ai');
+      if (hasAIResponses) {
+        setIsProcessing(true);
       }
-      return entry;
-    }));
+      
+      const translatedHistory = await Promise.all(
+        history.map(async (entry) => {
+          if (entry.type === 'response' && entry.responseType && entry.originalCommand) {
+            try {
+              const newContent = await generateResponseForCommand(entry.originalCommand, lang, entry.responseType);
+              return {
+                ...entry,
+                content: newContent
+              };
+            } catch (error) {
+              console.error('Error re-translating response:', error);
+              return entry;
+            }
+          }
+          return entry;
+        })
+      );
+      
+      setHistory(translatedHistory);
+      if (hasAIResponses) {
+        setIsProcessing(false);
+      }
+    };
+
+    if (history.length > 0) {
+      translateResponses();
+    }
   }, [lang]);
 
   const handleTerminalClick = () => {
@@ -69,123 +204,43 @@ const Terminal: React.FC<TerminalProps> = ({ lang, mode }) => {
     setInput('');
     setIsProcessing(true);
 
+    let responseType: ResponseType;
     let response: React.ReactNode = null;
-let {about,stack,works,contact,clear} = validCommands
 
     if (mode === 'ai') {
-      const aiText = await getTerminalResponse(cmd, lang);
-      response = <p className="text-slate-400 py-1 leading-relaxed text-sm">{aiText}</p>;
-    } else if (cmd === 'help') {
-      response = (
-        <div className="pl-6 py-4 border-l-2 border-slate-800 space-y-3 my-4">
-          <p className="text-slate-500 text-xs uppercase tracking-widest font-bold">{t.commands.help}</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-2">
-            {[
-              { name: about, desc: t.commands.helpDesc.about },
-              { name: stack, desc: t.commands.helpDesc.stack },
-              { name: works, desc: t.commands.helpDesc.works },
-              { name: contact, desc: t.commands.helpDesc.contact },
-              { name: clear, desc: t.commands.helpDesc.clear },
-            ].map(c => (
-              <div key={c.name} className="flex items-center justify-between group border-b border-white/[0.02] pb-1">
-                <span className="text-accent-teal/80 font-mono font-medium">{c.name}</span>
-                <span className="text-slate-600 text-[10px] italic">{c.desc}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      );
-    } else if (cmd === stack) {
-      response = (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-2 my-4">
-          {SKILL_GROUPS.map(group => (
-            <div key={group.id} className="glass-panel p-4 rounded-lg border border-white/5 hover:border-accent-blue/20 transition-all group">
-              <div className={`flex items-center gap-3 mb-3 ${group.color === 'blue' ? 'text-accent-blue' : group.color === 'teal' ? 'text-accent-teal' : 'text-slate-400'}`}>
-                <span className="material-symbols-outlined text-lg">{group.icon}</span>
-                <span className="text-[10px] font-bold uppercase tracking-widest">
-                  {t.sections.skills[group.id as keyof typeof t.sections.skills]}
-                </span>
-              </div>
-              <ul className="space-y-1">
-                {group.items.map(item => (
-                  <li key={item} className="text-[11px] text-slate-400 group-hover:text-slate-300 transition-colors flex items-center gap-2">
-                    <span className="size-1 rounded-full bg-slate-700"></span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      );
-    } else if (cmd === works) {
-      const projects = PROJECTS_DATA[lang];
-      response = (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-4">
-          {projects.map(p => (
-            <a 
-              key={p.title} 
-              href={p.link} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="glass-panel p-5 rounded-lg border border-white/5 bg-slate-900/40 hover:bg-slate-800/60 hover:border-accent-blue/30 transition-all flex flex-col"
-            >
-              <div className="flex justify-between items-start mb-2">
-                <h4 className="text-accent-blue text-[11px] font-bold uppercase flex items-center gap-2">
-                  <span className="size-1.5 rounded-full bg-accent-blue"></span>
-                  {p.title}
-                </h4>
-                <span className="material-symbols-outlined text-[14px] text-slate-600">open_in_new</span>
-              </div>
-              <p className="text-slate-400 text-[10px] mb-4 leading-relaxed flex-1">{p.description}</p>
-              <div className="flex flex-wrap gap-1.5">
-                {p.tags.map(tag => (
-                  <span key={tag} className="px-1.5 py-0.5 bg-slate-800 rounded-sm text-[8px] text-slate-500 font-mono border border-white/5">{tag}</span>
-                ))}
-              </div>
-            </a>
-          ))}
-        </div>
-      );
-    } else if (cmd === clear) {
+      responseType = 'ai';
+      response = await generateResponseForCommand(input, lang, 'ai');
+    } else if (cmd === validCommands.help) {
+      responseType = 'help';
+      response = await generateResponseForCommand(input, lang, 'help');
+    } else if (cmd === validCommands.stack) {
+      responseType = 'stack';
+      response = await generateResponseForCommand(input, lang, 'stack');
+    } else if (cmd === validCommands.works) {
+      responseType = 'works';
+      response = await generateResponseForCommand(input, lang, 'works');
+    } else if (cmd === validCommands.about) {
+      responseType = 'about';
+      response = await generateResponseForCommand(input, lang, 'about');
+    } else if (cmd === validCommands.contact) {
+      responseType = 'contact';
+      response = await generateResponseForCommand(input, lang, 'contact');
+    } else if (cmd === validCommands.clear) {
       setHistory([]);
       setIsProcessing(false);
       return;
-    } else if (cmd === about) {
-      response = (
-        <div className="text-slate-400 text-sm max-w-3xl space-y-4 my-4 pl-4 border-l-2 border-accent-blue/30">
-          <p className="italic leading-relaxed">{t.sections.about}</p>
-          <div className="flex items-center gap-4">
-            <a href="https://www.xetid.cu/en" target="_blank" className="flex items-center gap-2 px-3 py-1.5 bg-slate-800 rounded border border-white/5 hover:border-accent-teal/40 transition-colors">
-              <span className="material-symbols-outlined text-accent-teal text-sm">business</span>
-              <span className="text-[10px] font-bold uppercase tracking-wider">Xetid Official</span>
-            </a>
-          </div>
-        </div>
-      );
-    } else if (cmd === contact) {
-      response = (
-        <div className="flex flex-col gap-3 my-4 pl-4 border-l-2 border-accent-teal/30">
-          <a href="https://github.com/cjorgeluis122333" target="_blank" className="flex items-center gap-3 group">
-            <span className="material-symbols-outlined text-accent-blue text-sm group-hover:scale-110 transition-transform">link</span>
-            <span className="text-slate-300 text-xs font-mono group-hover:text-accent-blue transition-colors">github.com/cjorgeluis122333</span>
-          </a>
-          <a href="https://www.linkedin.com/in/jorge-luis-castillo-a93514341" target="_blank" className="flex items-center gap-3 group">
-            <span className="material-symbols-outlined text-accent-teal text-sm group-hover:scale-110 transition-transform">person</span>
-            <span className="text-slate-300 text-xs font-mono group-hover:text-accent-teal transition-colors">linkedin.com/in/jorge-luis-castillo</span>
-          </a>
-         </div>
-       );
-      } else {
-        response = <p className="text-red-400 py-1 leading-relaxed text-sm">{t.errorMessage.replace('{input}', input)}</p>;
-      }
+    } else {
+      responseType = 'error';
+      response = await generateResponseForCommand(input, lang, 'error');
+    }
 
     setHistory(prev => [...prev, {
       id: (Date.now() + 1).toString(),
       type: 'response',
       content: response,
       timestamp: new Date(),
-      originalCommand: input // Store original command for potential re-translation
+      originalCommand: input, // Store original command for potential re-translation
+      responseType: responseType // Store response type for dynamic re-translation
     }]);
 
     setIsProcessing(false);
