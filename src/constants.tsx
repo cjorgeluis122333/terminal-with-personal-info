@@ -42,7 +42,12 @@ export const TRANSLATIONS = {
                 db: "Databases",
                 tools: "Tools"
             }
-        }
+        },
+        footer: {
+            systemOperational: "System Operational",
+            region: "Region: us-east-1"
+        },
+        errorMessage: "The term '{input}' is not recognized."
     },
 
     es: {
@@ -85,7 +90,12 @@ export const TRANSLATIONS = {
                 db: "Bases de Datos",
                 tools: "Herramientas"
             }
-        }
+        },
+        footer: {
+            systemOperational: "Sistema Operativo",
+            region: "Región: us-east-1"
+        },
+        errorMessage: "El término '{input}' no se reconoce."
     }
 };
 

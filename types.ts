@@ -5,6 +5,7 @@ export type CommandEntry = {
   type: 'command' | 'response';
   content: string | React.ReactNode;
   timestamp: Date;
+  originalCommand?: string; // Store original command for re-translation
 };
 
 export interface Project {

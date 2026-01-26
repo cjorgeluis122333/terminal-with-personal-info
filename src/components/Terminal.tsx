@@ -27,6 +27,27 @@ const Terminal: React.FC<TerminalProps> = ({ lang, mode }) => {
     }
   }, [history, isProcessing]);
 
+  // Re-translate error messages when language changes
+  useEffect(() => {
+    setHistory(prev => prev.map(entry => {
+      if (entry.type === 'response' && entry.originalCommand) {
+        // Re-generate response for error messages in new language
+        const t = TRANSLATIONS[lang];
+        const cmd = entry.originalCommand.trim().toLowerCase();
+        
+        // Only re-translate error messages
+        if (!validCommands[cmd as keyof typeof validCommands]) {
+          const newErrorResponse = <p className="text-red-400 py-1 leading-relaxed text-sm">{t.errorMessage.replace('{input}', entry.originalCommand)}</p>;
+          return {
+            ...entry,
+            content: newErrorResponse
+          };
+        }
+      }
+      return entry;
+    }));
+  }, [lang]);
+
   const handleTerminalClick = () => {
     inputRef.current?.focus();
   };
@@ -40,7 +61,8 @@ const Terminal: React.FC<TerminalProps> = ({ lang, mode }) => {
       id: Date.now().toString(),
       type: 'command',
       content: input,
-      timestamp: new Date()
+      timestamp: new Date(),
+      originalCommand: input // Store original for re-translation
     };
 
     setHistory(prev => [...prev, newEntry]);
@@ -154,15 +176,16 @@ let {about,stack,works,contact,clear} = validCommands
           </a>
          </div>
        );
-     } else {
-       response = <p className="text-red-400 py-1 leading-relaxed text-sm">El término '{input}' no se reconoce.</p>;
-     }
+      } else {
+        response = <p className="text-red-400 py-1 leading-relaxed text-sm">{t.errorMessage.replace('{input}', input)}</p>;
+      }
 
     setHistory(prev => [...prev, {
       id: (Date.now() + 1).toString(),
       type: 'response',
       content: response,
-      timestamp: new Date()
+      timestamp: new Date(),
+      originalCommand: input // Store original command for potential re-translation
     }]);
 
     setIsProcessing(false);
