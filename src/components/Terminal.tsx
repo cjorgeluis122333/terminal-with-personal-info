@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { CommandEntry } from '../types';
+import { CommandEntry } from '@/types.ts';
 import {Language, TRANSLATIONS, SKILL_GROUPS, PROJECTS_DATA, Mode, validCommands} from '../constants';
-import { getTerminalResponse } from '../services/geminiService';
+import { getTerminalResponse } from '../services/geminiService.ts';
 
 
 interface TerminalProps {

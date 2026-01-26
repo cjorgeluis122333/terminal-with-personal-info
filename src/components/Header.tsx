@@ -29,20 +29,21 @@ const Header: React.FC<HeaderProps> = ({ lang, setLang, mode, setMode }) => {
       
        <div className="flex items-center gap-6">
          {/* Mode Switcher */}
-         <div className="flex bg-slate-900 rounded-lg p-1 border border-white/5 shadow-inner">
-           <button
-             onClick={() => setMode('terminal')}
-             className={`px-3 py-1 text-[10px] font-bold rounded-md transition-all ${mode === 'terminal' ? 'bg-accent-teal/20 text-accent-teal shadow-sm' : 'text-slate-500 hover:text-slate-300'}`}
-           >
-             {lang === 'en' ? 'Terminal' : 'Terminal'}
-           </button>
-           <button
-             onClick={() => setMode('ai')}
-             className={`px-3 py-1 text-[10px] font-bold rounded-md transition-all ${mode === 'ai' ? 'bg-accent-teal/20 text-accent-teal shadow-sm' : 'text-slate-500 hover:text-slate-300'}`}
-           >
-             {lang === 'en' ? 'AI' : 'IA'}
-           </button>
-         </div>
+         {/*<div className="flex bg-slate-900 rounded-lg p-1 border border-white/5 shadow-inner">*/}
+         {/*  <button*/}
+         {/*    onClick={() => setMode('terminal')}*/}
+         {/*    className={`px-3 py-1 text-[10px] font-bold rounded-md transition-all ${mode === 'terminal' ? 'bg-accent-teal/20 text-accent-teal shadow-sm' : 'text-slate-500 hover:text-slate-300'}`}*/}
+         {/*  >*/}
+         {/*    {lang === 'en' ? 'Terminal' : 'Terminal'}*/}
+         {/*  </button>*/}
+         {/*  <button*/}
+         {/*    onClick={() => setMode('ai')}*/}
+         {/*    className={`px-3 py-1 text-[10px] font-bold rounded-md transition-all ${mode === 'ai' ? 'bg-accent-teal/20 text-accent-teal shadow-sm' : 'text-slate-500 hover:text-slate-300'}`}*/}
+         {/*  >*/}
+         {/*    {lang === 'en' ? 'AI' : 'IA'}*/}
+         {/*  </button>*/}
+         {/*</div>*/}
+
 
          {/* Language Switcher */}
          <div className="flex bg-slate-900 rounded-lg p-1 border border-white/5 shadow-inner">
